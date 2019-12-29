@@ -208,6 +208,7 @@ def keep_alive():
                         logging.info("Error: {}".format(k))
                         logging.info("Connection dropped: {}".format(rm_conn))
                         logging.info("Requests before drop: {}".format(req))
+                        logging.info("Socket count: %s", len(list_of_sockets))
                         
                 if len(list_of_sockets) >= 1:
                     req += 1
