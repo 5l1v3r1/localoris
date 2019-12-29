@@ -153,15 +153,19 @@ def main():
     logging.info("Creating sockets...")
     t = threading.Thread(target=keep_alive, args=())
     t.start()
+    c = 0
     for o in range(socket_count):
         try:
             #logging.info("Creating socket nr %s", o)
             s = init_socket(ip)
+            list_of_sockets.append(s)
+        
         except socket.error as e:
             init = True
             logging.info("Error creating socket: {}".format(e))
             break
-        list_of_sockets.append(s)
+        
+        
     init = True
 
 def keep_alive():
@@ -172,21 +176,20 @@ def keep_alive():
     while True:
         try:
             if init == True:
-                    
-                    for l in range(socket_count - len(list_of_sockets)):
-                        try:
-                            s = init_socket(ip)
+                #Recreate dropped connections
+                for l in range(socket_count - len(list_of_sockets)):
+                    try:
+                        s = init_socket(ip)
+                        if s:
+                            list_of_sockets.append(s)
+                        else:
+                            logging.info("Error couldn't connect")
                             
-                            if s:
-                                list_of_sockets.append(s)
-                            else:
-                                logging.info("Error couldn't connect")
-                                
-                        except socket.error as e:
-                            logging.info("Error creating socket: {}".format(e))
-                            break
-                    #logging.info("Sleeping for %d seconds", args.sleeptime)
-                    #time.sleep(args.sleeptime)
+                    except socket.error as e:
+                        logging.info("Error creating socket: {}".format(e))
+                        break
+                #logging.info("Sleeping for %d seconds", args.sleeptime)
+                #time.sleep(args.sleeptime)
 
             if len(list_of_sockets) > 0:
                 logging.info(
