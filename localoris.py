@@ -6,6 +6,7 @@ import socket
 import sys
 import time
 import threading
+from os import system
 
 parser = argparse.ArgumentParser(
     description="Slowloris, low bandwidth stress test tool for websites"
@@ -220,8 +221,10 @@ def keep_alive():
 
             
                 
-            elif init:
+            elif init and (len(list_of_sockets) == 0):
+                
                 logging.info("Connection dropped to 0")
+                system("sudo service tor restart")
                 main()
                 exit()
                 
