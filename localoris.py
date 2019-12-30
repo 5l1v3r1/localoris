@@ -136,7 +136,7 @@ def init_socket(ip):
 
     s.connect((ip, args.port))
 
-    s.send("GET /scam?{} HTTP/1.1\r\nHost: {}\r\n".format(random.randint(0, 2000), ip).encode("utf-8"))
+    s.send("GET /?{} HTTP/1.1\r\nHost: {}\r\n".format(random.randint(0, 2000), ip).encode("utf-8"))
     if args.randuseragent:
         s.send("User-Agent: {}\r\n".format(random.choice(user_agents)).encode("utf-8"))
     else:
